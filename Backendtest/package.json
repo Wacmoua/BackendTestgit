@@ -1,0 +1,19 @@
+{
+  "name": "appdwwm",
+  "version": "1.0.0",
+  "description": "1 - `npm i` pour installer les dépendance 2 - Entrer son MONGO URI perso dans .env enfin de se connecter à sa base de donnée",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon ./backend/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^6.12.0",
+    "nodemon": "^2.0.22"
+  }
+}
