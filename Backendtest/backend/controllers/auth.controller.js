@@ -3,10 +3,10 @@ const User = require("../models/user.model");
 
 const registerUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
     // Vérifiez si l'utilisateur existe déjà
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({  $or: [{ username }, { email }]});
     if (existingUser) {
       return res.status(400).json({ message: "Cet utilisateur existe déjà." });
     }
@@ -17,6 +17,7 @@ const registerUser = async (req, res) => {
     // Création d'un nouvel utilisateur
     const newUser = await User.create({
       username,
+      email,
       password: hashedPassword,
     });
 
