@@ -1,24 +1,7 @@
-// post.routes.js
-const express = require("express");
-const cors = require("cors");
-const {
-  setPosts,
-  getPosts,
-  editPost,
-  deletePost,
-  likePost,
-  dislikePost,
-} = require("../controllers/post.controller");
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
 
-const router = express.Router();
-
-// Middleware CORS - Ajoutez-le au début
-router.use(cors());
-
-// Route d'enregistrement d'un nouvel utilisateur
-router.post("/register", async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -42,10 +25,9 @@ router.post("/register", async (req, res) => {
     console.error("Erreur lors de l'enregistrement de l'utilisateur :", error);
     res.status(500).json({ error: "Erreur interne du serveur." });
   }
-});
+};
 
-// Route de connexion de l'utilisateur
-router.post("/login", async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -69,15 +51,9 @@ router.post("/login", async (req, res) => {
     console.error("Erreur lors de la connexion de l'utilisateur :", error);
     res.status(500).json({ error: "Erreur interne du serveur." });
   }
-});
+};
 
-// Routes pour les posts
-router.get("/", getPosts);
-router.post("/", setPosts);
-router.put("/:id", editPost);
-router.delete("/:id", deletePost);
-router.patch("/like-post/:id", likePost);
-router.patch("/dislike-post/:id", dislikePost);
-
-module.exports = router;
-
+module.exports = {
+  registerUser,
+  loginUser,
+};

@@ -1,23 +1,42 @@
 const express = require("express");
+const session = require("express-session");
 const connectDB = require("./config/db");
-const cors = require("cors"); // Importez le module cors
-const dotenv = require("dotenv").config();
-const port = 5000;
+const app = express();
+const postRoutes = require("./routes/post.routes");
+const authRoutes = require("./routes/auth.routes");
+const bodyParser = require("body-parser");
 
-// connexion à la DB
+require('dotenv').config();
+
+// Middleware Body Parser
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+// Connexion à la base de données
 connectDB();
 
-const app = express();
+// Middleware CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
-// Middleware CORS - Ajoutez-le au début
-app.use(cors());
+// Middleware de session
+app.use(
+  session({
+    secret: "votre_secret_session",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
-// Middleware qui permet de traiter les données de la Request
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Routes
+app.use("/auth", authRoutes);
+app.use("/post", postRoutes);
 
-app.use("/post", require("./routes/post.routes"));
-
-// Lancer le serveur
-app.listen(port, () => console.log("Le serveur a démarré au port  " + port));
-
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
+});
